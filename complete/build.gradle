@@ -48,6 +48,10 @@ compileJava.dependsOn genJaxb
 // tag::jaxb[]
 configurations {
     jaxb
+
+    all {
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+    }
 }
 
 bootJar {
@@ -58,11 +62,48 @@ bootJar {
 
 // tag::dependencies[]
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-web'
+	// implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-web-services'
     implementation 'org.glassfish.jaxb:jaxb-xjc'
     implementation 'wsdl4j:wsdl4j'
+
     jaxb("org.glassfish.jaxb:jaxb-xjc")
+
     testImplementation('org.springframework.boot:spring-boot-starter-test')
+
+    // SOAP-UI public dependencies
+    // testImplementation('org.apache.xmlbeans:xmlbeans:3.1.0')
+    testImplementation('commons-cli:commons-cli:1.2')
+    testImplementation 'org.apache.logging.log4j:log4j-core:2.17.1'
+    testImplementation 'org.apache.logging.log4j:log4j-api:2.17.1'
+    testImplementation 'org.apache.logging.log4j:log4j-slf4j-impl:2.17.1'
+    testImplementation 'commons-io:commons-io:2.4'
+    testImplementation 'org.apache.httpcomponents:httpclient:4.5.5'
+    testImplementation 'commons-lang:commons-lang:2.4'
+    testImplementation 'xalan:xalan:2.7.2'
+    testImplementation 'org.reflections:reflections:0.9.9-RC1'
+    testImplementation 'org.codehaus.groovy:groovy-all:3.0.6'
+    testImplementation 'org.bouncycastle:bcprov-jdk15on:1.64'
+    testImplementation 'commons-collections:commons-collections:3.2.2'
+    testImplementation 'commons-beanutils:commons-beanutils:1.9.4'
+
+    // SOAP-UI
+    dependencies {
+        testImplementation files(
+                'libs/soapui-5.7.0.jar',
+                'libs/xmlbeans-3.1.1-sb-fixed.jar',
+                'libs/rsyntaxtextarea-2.5.0.jar',
+                'libs/proxy-vole-20131209.jar',
+                'libs/analytics-core-5.5.3.jar',
+                'libs/flex-messaging-core-1.0.jar',
+                'libs/jms-1.1.jar',
+                'libs/mail-1.4.jar'
+        )
+    }
 }
 // end::dependencies[]
+
+test {
+    useJUnitPlatform()
+    environment("log4j2.formatMsgNoLookups", true)
+}

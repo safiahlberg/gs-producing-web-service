@@ -16,19 +16,18 @@
 
 package com.example.producingwebservice;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
+import com.eviware.soapui.tools.SoapUITestCaseRunner;
+import io.spring.guides.gs_producing_web_service.GetCountryRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import io.spring.guides.gs_producing_web_service.GetCountryRequest;
-
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.util.ClassUtils;
 import org.springframework.ws.client.core.WebServiceTemplate;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class ProducingWebServiceApplicationIntegrationTests {
@@ -53,4 +52,20 @@ public class ProducingWebServiceApplicationIntegrationTests {
 		assertThat(ws.marshalSendAndReceive("http://localhost:"
 				+ port + "/ws", request) != null);
     }
+
+	@Test
+	public void soapUiProjectTest() throws Exception {
+		SoapUITestCaseRunner runner = new SoapUITestCaseRunner();
+		runner.setProjectFile( "doc/countries-soapui-project.xml" );
+		runner.run();
+
+/*
+		WsdlProject project = new WsdlProject( "doc/countries-soapui-project.xml" );
+		TestSuite testSuite = project.getTestSuiteByName( "Test Countries Suite" );
+		TestCase testCase = testSuite.getTestCaseByName( "Test getCountry" );
+
+		// create empty properties and run synchronously
+		TestRunner runner = testCase.run( new PropertiesMap(), false );
+		assertEquals( TestRunner.Status.FINISHED, runner.getStatus() );*/
+	}
 }
