@@ -32,32 +32,32 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class ProducingWebServiceApplicationIntegrationTests {
 
-	private Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
+    private Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
 
-	@LocalServerPort
-	private int port = 0;
+    @LocalServerPort
+    private int port = 0;
 
-	@BeforeEach
-	public void init() throws Exception {
-		marshaller.setPackagesToScan(ClassUtils.getPackageName(GetCountryRequest.class));
-		marshaller.afterPropertiesSet();
-	}
-
-	@Test
-	public void testSendAndReceive() {
-		WebServiceTemplate ws = new WebServiceTemplate(marshaller);
-		GetCountryRequest request = new GetCountryRequest();
-		request.setName("Spain");
-
-		assertThat(ws.marshalSendAndReceive("http://localhost:"
-				+ port + "/ws", request) != null);
+    @BeforeEach
+    public void init() throws Exception {
+        marshaller.setPackagesToScan(ClassUtils.getPackageName(GetCountryRequest.class));
+        marshaller.afterPropertiesSet();
     }
 
-	@Test
-	public void soapUiProjectTest() throws Exception {
-		SoapUITestCaseRunner runner = new SoapUITestCaseRunner();
-		runner.setProjectFile( "doc/countries-soapui-project.xml" );
-		runner.run();
+    @Test
+    public void testSendAndReceive() {
+        WebServiceTemplate ws = new WebServiceTemplate(marshaller);
+        GetCountryRequest request = new GetCountryRequest();
+        request.setName("Spain");
+
+        assertThat(ws.marshalSendAndReceive("http://localhost:"
+                + port + "/ws", request) != null);
+    }
+
+    @Test
+    public void soapUiProjectTest() throws Exception {
+        SoapUITestCaseRunner runner = new SoapUITestCaseRunner();
+        runner.setProjectFile("doc/countries-soapui-project.xml");
+        runner.run();
 
 /*
 		WsdlProject project = new WsdlProject( "doc/countries-soapui-project.xml" );
@@ -67,5 +67,5 @@ public class ProducingWebServiceApplicationIntegrationTests {
 		// create empty properties and run synchronously
 		TestRunner runner = testCase.run( new PropertiesMap(), false );
 		assertEquals( TestRunner.Status.FINISHED, runner.getStatus() );*/
-	}
+    }
 }
